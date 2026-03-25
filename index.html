@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMT Project Roadmap - Transformer Only</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f172a; /* slate-900 */
+            color: #f8fafc; /* slate-50 */
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* Timeline Styles */
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        /* The vertical line */
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #3b82f6; /* blue-500 */
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 10px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .timeline-item:hover {
+            transform: scale(1.02);
+        }
+
+        /* The circles on the timeline */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            right: -12px;
+            background-color: #0f172a;
+            border: 4px solid #3b82f6;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover::after {
+            background-color: #3b82f6;
+            box-shadow: 0 0 15px #3b82f6;
+        }
+
+        /* Left and Right positions */
+        .left { left: 0; }
+        .right { left: 50%; }
+        .right::after { left: -12px; }
+
+        /* Content Box */
+        .content {
+            padding: 20px 30px;
+            background-color: #1e293b;
+            position: relative;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s;
+        }
+        
+        .timeline-item:hover .content {
+            border-color: #3b82f6;
+        }
+
+        /* Connecting arrows */
+        .left .content::after {
+            content: " ";
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            margin-top: -10px;
+            border-width: 10px 0 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent transparent #334155;
+        }
+        .right .content::after {
+            content: " ";
+            position: absolute;
+            top: 50%;
+            left: -10px;
+            margin-top: -10px;
+            border-width: 10px 10px 10px 0;
+            border-style: solid;
+            border-color: transparent #334155 transparent transparent;
+        }
+
+        /* Sidebar Overlay */
+        #sidebar-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Sidebar Slide effect */
+        #sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        #sidebar.open {
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 768px) {
+            .timeline-container::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item::after { left: 19px; }
+            .left::after, .right::after { left: 19px; }
+            .right { left: 0%; }
+            .left .content::after, .right .content::after {
+                left: -10px;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent #334155 transparent transparent;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="text-center py-10 border-b border-slate-800 bg-slate-900 sticky top-0 z-10 shadow-lg">
+        <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-2">
+            NMT Project Roadmap
+        </h1>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto px-4">
+            Lộ trình phát triển hệ thống Dịch máy Anh-Việt (Neural Machine Translation) tập trung sử dụng kiến trúc Transformer. Bấm vào từng Node để xem chi tiết task và phân công.
+        </p>
+        <div class="mt-4 flex justify-center gap-4 text-sm font-medium">
+            <span class="px-3 py-1 bg-slate-800 rounded-full text-blue-400 border border-slate-700"><i class="fa-brands fa-github mr-1"></i> Git Flow</span>
+            <span class="px-3 py-1 bg-slate-800 rounded-full text-amber-400 border border-slate-700"><i class="fa-solid fa-bolt mr-1"></i> Transformer Only</span>
+        </div>
+    </header>
+
+    <!-- Roadmap Timeline -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="timeline-container" id="timeline-container">
+            <!-- Items will be injected here by JS -->
+        </div>
+    </main>
+
+    <!-- Sidebar / Modal for Task Details -->
+    <div id="sidebar-overlay" class="fixed inset-0 z-40 hidden opacity-0" onclick="closeSidebar()"></div>
+    <div id="sidebar" class="fixed top-0 right-0 h-full w-full md:w-[500px] bg-slate-800 border-l border-slate-700 z-50 overflow-y-auto shadow-2xl flex flex-col">
+        <div class="p-6 border-b border-slate-700 flex justify-between items-center bg-slate-900 sticky top-0">
+            <h2 id="sb-title" class="text-2xl font-bold text-blue-400">Node Title</h2>
+            <button onclick="closeSidebar()" class="text-slate-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+        </div>
+        
+        <div class="p-6 flex-grow">
+            <!-- Info Section -->
+            <div class="mb-6">
+                <p id="sb-desc" class="text-slate-300 mb-4"></p>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-slate-400 font-semibold"><i class="fa-solid fa-user-tag mr-2"></i>Phân công (Role):</span>
+                    <span id="sb-role" class="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-md text-sm border border-blue-800"></span>
+                </div>
+            </div>
+
+            <hr class="border-slate-700 mb-6">
+
+            <!-- Tasks Checklist -->
+            <h3 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-list-check mr-2"></i>Checklist Công việc</h3>
+            <div id="sb-tasks" class="space-y-3">
+                <!-- Tasks injected by JS -->
+            </div>
+        </div>
+
+        <div class="p-6 border-t border-slate-700 bg-slate-900">
+            <button onclick="closeSidebar()" class="w-full py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors font-medium">
+                Đóng
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // Data derived from the uploaded PDF (GRU removed)
+        const roadmapData = [
+            {
+                id: 1,
+                title: "Khởi tạo Project & Môi trường",
+                desc: "Thiết lập nền tảng dự án, quy trình làm việc nhóm trên GitHub và môi trường lập trình.",
+                role: "Project Leader / DevOps",
+                icon: "fa-solid fa-rocket",
+                color: "text-blue-400",
+                tasks: [
+                    "Tạo GitHub Repository (thống nhất nhánh main và các nhánh tính năng dev).",
+                    "Thiết lập môi trường ảo (Virtual Environment) / Docker.",
+                    "Tạo file requirements.txt (torch, transformers, datasets, sacrebleu,...).",
+                    "Tạo cấu trúc thư mục chuẩn (data/, models/, utils/, notebooks/).",
+                    "Tạo file .gitignore."
+                ]
+            },
+            {
+                id: 2,
+                title: "Tiền xử lý & Tokenizer",
+                desc: "Xử lý dataset song ngữ, xây dựng Tokenizer để chuyển đổi văn bản thành dạng số (Tensor).",
+                role: "Data Engineer / ML Engineer",
+                icon: "fa-solid fa-database",
+                color: "text-emerald-400",
+                tasks: [
+                    "Tải dataset 'thainq107/iwslt2015-en-vi' dùng thư viện datasets.",
+                    "Code hàm `build_tokenizer`: Khởi tạo WordLevel Tokenizer với VOCAB_SIZE = 10000.",
+                    "Thêm special tokens: <pad>, <s> (BOS), </s> (EOS), <unk>.",
+                    "Code hàm `encode_src` và `encode_tgt`: Thêm token bắt đầu, kết thúc và Padding/Cắt theo MAX_LEN = 75.",
+                    "Code hàm `preprocess`: Map dataset gốc sang dạng Tensor (src_ids, tgt_ids)."
+                ]
+            },
+            {
+                id: 3,
+                title: "Xây dựng Transformer",
+                desc: "Triển khai kiến trúc học sâu bằng self-attention (Thay thế hoàn toàn GRU).",
+                role: "ML Engineer (Model Architecture)",
+                icon: "fa-solid fa-bolt",
+                color: "text-amber-400",
+                tasks: [
+                    "Code class `PositionalEncoding`: Dùng sin/cos để đưa thông tin vị trí vào chuỗi.",
+                    "Code class `TransformerSeq2Seq`: Khởi tạo nn.TransformerEncoder và nn.TransformerDecoder.",
+                    "Xử lý `src_key_pad` và `tgt_key_pad` (Padding Mask) để bỏ qua <pad> token.",
+                    "Code Causal Mask: Dùng `generate_square_subsequent_mask` để decoder không nhìn trộm tương lai.",
+                    "Kết nối dữ liệu qua Encoder -> Decoder -> nn.Linear(vocab_size)."
+                ]
+            },
+            {
+                id: 4,
+                title: "Logic Giải mã - Decoding",
+                desc: "Xây dựng thuật toán sinh từ trong quá trình suy luận (Inference) cho Transformer.",
+                role: "ML Engineer (Inference)",
+                icon: "fa-solid fa-microchip",
+                color: "text-rose-400",
+                tasks: [
+                    "Code hàm `greedy_decode` cho Transformer: Tại mỗi bước lấy argmax của logits.",
+                    "Code hàm `beam_search_decode` cho Transformer: Giữ k ứng viên tốt nhất tại mỗi bước (beam_width).",
+                    "Xử lý điều kiện dừng: Gặp EOS_ID hoặc chạm max_len.",
+                    "Tối ưu Inference: Tính toán `memory` từ Encoder 1 lần duy nhất, tránh tính lại trong vòng lặp sinh từ."
+                ]
+            },
+            {
+                id: 5,
+                title: "Huấn luyện - Dataloader & Train",
+                desc: "Viết quy trình huấn luyện, tính loss và cập nhật trọng số cho mô hình Transformer.",
+                role: "MLOps / ML Engineer",
+                icon: "fa-solid fa-dumbbell",
+                color: "text-cyan-400",
+                tasks: [
+                    "Code hàm `nmt_collate`: Gom mini-batch thành PyTorch Tensors.",
+                    "Thiết lập DataLoader cho tập train và validation.",
+                    "Định nghĩa Loss Function: `nn.CrossEntropyLoss(ignore_index=PAD_ID)`.",
+                    "Viết vòng lặp `train_model`: Forward pass, tính loss trên `tgt[:, 1:]` (cơ chế shift-right), backward, optimizer step.",
+                    "Tính Loss trên tập Evaluation sau mỗi Epoch.",
+                    "Code module lưu mô hình (`torch.save`) cho Transformer (best_model_transformer.pt)."
+                ]
+            },
+            {
+                id: 6,
+                title: "Đánh giá & Kiểm thử (BLEU)",
+                desc: "Tiến hành đo lường chất lượng dịch thuật của Transformer.",
+                role: "QA / Researcher",
+                icon: "fa-solid fa-chart-line",
+                color: "text-lime-400",
+                tasks: [
+                    "Load mô hình tốt nhất (.pt) đã lưu.",
+                    "Viết script chạy Inference trên tập validation/test.",
+                    "Sử dụng thư viện SacreBLEU để tính điểm BLEU score.",
+                    "So sánh và lập bảng kết quả giữa 2 cơ chế giải mã: Greedy vs Beam Search.",
+                    "Vẽ biểu đồ Train Loss / Eval Loss cho Transformer."
+                ]
+            },
+            {
+                id: 7,
+                title: "Đóng gói & Đưa lên GitHub",
+                desc: "Tổng hợp code, viết tài liệu và xuất bản dự án.",
+                role: "Toàn Team",
+                icon: "fa-brands fa-git-alt",
+                color: "text-orange-400",
+                tasks: [
+                    "Review code (Code Refactoring): Tách các phần thành file riêng (data.py, models.py, train.py, infer.py).",
+                    "Gộp code (Merge PR) vào nhánh `main`.",
+                    "Viết file `README.md`: Hướng dẫn chi tiết cách tải data, cách train, cách chạy inference.",
+                    "Đính kèm hình ảnh biểu đồ Loss và bảng điểm BLEU vào README.",
+                    "Release project lên GitHub."
+                ]
+            }
+        ];
+
+        // Render Timeline
+        const container = document.getElementById('timeline-container');
+        
+        roadmapData.forEach((node, index) => {
+            const side = index % 2 === 0 ? 'left' : 'right';
+            
+            const itemHTML = `
+                <div class="timeline-item ${side}" onclick="openSidebar(${node.id})">
+                    <div class="content hover:bg-slate-800 transition-colors">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-700">
+                                <i class="${node.icon} ${node.color} text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">${node.title}</h3>
+                        </div>
+                        <p class="text-slate-400 text-sm mb-3 line-clamp-2">${node.desc}</p>
+                        <span class="inline-block px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded-md font-medium">
+                            <i class="fa-solid fa-user text-[10px] mr-1"></i> ${node.role}
+                        </span>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += itemHTML;
+        });
+
+        // Sidebar Logic
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function openSidebar(id) {
+            const node = roadmapData.find(n => n.id === id);
+            if (!node) return;
+
+            document.getElementById('sb-title').innerText = `Bước ${node.id}: ${node.title}`;
+            document.getElementById('sb-desc').innerText = node.desc;
+            document.getElementById('sb-role').innerText = node.role;
+
+            const tasksContainer = document.getElementById('sb-tasks');
+            tasksContainer.innerHTML = '';
+            
+            node.tasks.forEach((task, idx) => {
+                const taskHtml = `
+                    <label class="flex items-start gap-3 p-3 bg-slate-900 rounded-lg border border-slate-700 cursor-pointer hover:border-blue-500 transition-colors">
+                        <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 text-blue-500 focus:ring-blue-500 focus:ring-offset-slate-900 bg-slate-800">
+                        <span class="text-slate-300 text-sm leading-relaxed select-none">${task}</span>
+                    </label>
+                `;
+                tasksContainer.innerHTML += taskHtml;
+            });
+
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                sidebar.classList.add('open');
+            }, 10);
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 300);
+        }
+
+        // Close sidebar on escape key or clicking outside
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSidebar();
+            }
+        });
+    </script>
+</body>
+</html>
