@@ -74,8 +74,51 @@ class Normalier:
                 if len(text) == 0 or text.isspace():
                     raise ValueError('Text contain no content!')   
                 
-            self.language.append(detect(text))          
+            self.language.append(detect(text))         
+    
+class Normalier2:
+    def __init__(self):
+        self.whitespace = re.compile(r'\s+')
+    def read_text(self, path: Path) -> str:
+        try:
+            return path.read_text(encoding='utf-8')
+        except UnicodeDecodeError:
+            raw = path.read_bytes()
+            encoding = chardet.detect(raw)['encoding'] or 'utf-8'
+            return raw.decode(
+                encoding,
+                errors='replace'
+            )
+    def clean_text(self, text: str)->str:
+        text = normalize('NFC', text)
+        text = self.whitespace.sub(' ', text)
+        return text
+    def validate_text(self, text: str):
+        if not text:
+            raise ValueError("Empty text")
+        if not is_normalized("NFC", text):
+            raise ValueError("Text not NFC normalized")
+    def process_file(self, path: Path):
+        text = self.read_text(path)
+        text = self.clean_text(text)
+        self.validate_text(text)
+        try:
+            lang = detect(text)
+        except:
+            lang = "unknown"
+        return {
+            "path": str(path),
+            "text": text,
+            "language": lang,
+        }
+    def process_directory(self, directory):
+        for path in Path(directory).rglob("*.txt"):
+            try:
+                yield self.process_file(path)
 
+            except Exception as e:
+                print(f"[ERROR] {path}: {e}")
+        
 a = Normalier()
 a.normalize_encoding()
 a.cleaning()
